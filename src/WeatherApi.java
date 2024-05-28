@@ -36,7 +36,6 @@ public class WeatherApi {
     }
     public JSONObject getWeatherData(String city) throws IOException, ParseException {
         JSONObject locationData = getLocationData(city);
-
         URL url = new URL("https://api.openweathermap.org/data/3.0/onecall?lat="+locationData.get("lat")+"&lon="+locationData.get("lon")+"&exclude=hourly,daily,minutely,alerts&appid="+apiKey);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
