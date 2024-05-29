@@ -85,7 +85,7 @@ public class Gui extends JFrame {
         mainPanel.setLayout(null);
         mainPanel.setBackground(new Color(245, 245, 220));
 
-        cityText = new JTextField();
+        cityText = new JTextField("London");
         cityText.setBounds(25,10,300,40);
         cityText.setFont(new Font("MONOSPACED",Font.BOLD,20));
 
