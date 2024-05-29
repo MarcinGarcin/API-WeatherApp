@@ -16,15 +16,26 @@ public class Gui extends JFrame {
     private JTextField cityText;
     private JButton updateButton;
     private JLabel weatherTypeLabel;
+    private JLabel temperatureText;
     private JLabel temperatureLabel;
+    private JLabel humidityText;
+    private JLabel humidityLabel;
+    private JLabel windSpeedText;
+    private JLabel windSpeedLabel;
+    private JLabel pressureText;
+    private JLabel pressureLabel;
     private static Image searchImg;
+    private static Image temperatureImg;
+    private static Image humidityImg;
+    private static Image windSpeedImg;
+    private static Image pressureImg;
     private static Image rainImg;
     private static Image cloudImg;
     private static Image snowImg;
     private static Image clearImg;
     private static Image stormImg;
-    private static Image atmosphereImg;
     private static Image drizzleImg;
+
 
 
     public Gui(String city, String weatherType, double temperature, double humidity, double windSpeed, WeatherApi weatherApi) {
@@ -49,12 +60,17 @@ public class Gui extends JFrame {
     }
     public void loadIcons(){
         try {
+            pressureImg = ImageIO.read(getClass().getResource("Assets/pressure.png"));
+            temperatureImg = ImageIO.read(getClass().getResource("Assets/temperature.png"));
             searchImg = ImageIO.read(getClass().getResource("Assets/search.png"));
             cloudImg = ImageIO.read(getClass().getResource("Assets/cloud.png"));
             clearImg = ImageIO.read(getClass().getResource("Assets/clear.png"));
             rainImg = ImageIO.read(getClass().getResource("Assets/rain.png"));
             snowImg = ImageIO.read(getClass().getResource("Assets/snow.png"));
             stormImg = ImageIO.read(getClass().getResource("Assets/storm.png"));
+            drizzleImg = ImageIO.read(getClass().getResource("Assets/drizzle.png"));
+            humidityImg = ImageIO.read(getClass().getResource("Assets/humidity.png"));
+            windSpeedImg = ImageIO.read(getClass().getResource("Assets/windSpeed.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,12 +78,12 @@ public class Gui extends JFrame {
 
     public void createPanel() {
         mainPanel = new JPanel();
-        mainPanel.setSize(400,500);
+        mainPanel.setSize(400,600);
         mainPanel.setLayout(null);
-        mainPanel.setBackground(Color.black);
+        mainPanel.setBackground(new Color(245, 245, 220));
 
         cityText = new JTextField();
-        cityText.setBounds(30,10,300,40);
+        cityText.setBounds(25,10,300,40);
         cityText.setFont(new Font("MONOSPACED",Font.BOLD,20));
 
         updateButton = new JButton();
@@ -76,9 +92,9 @@ public class Gui extends JFrame {
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                city = cityText.getText();
+                city = cityText.getText().replace(' ','_');
                 weatherTypeLabel.setIcon(new ImageIcon(getPreparedImg(weatherApi.getWeatherType(city))));
-                temperatureLabel.setText(String.valueOf(weatherApi.getTemperature(city)));
+                temperatureText.setText(String.format("%.1f", weatherApi.getTemperature(city) )+"°C");
 
             }
         });
@@ -88,10 +104,46 @@ public class Gui extends JFrame {
         weatherTypeLabel.setBounds(50,50,300,300);
 
         temperatureLabel = new JLabel();
-        temperatureLabel.setText(String.valueOf(temperature));
-        temperatureLabel.setBounds(50,370,50,20);
+        temperatureLabel.setIcon(new ImageIcon(temperatureImg));
+        temperatureLabel.setBounds(20, 350, 45, 45);
 
+        temperatureText = new JLabel();
+        temperatureText.setText(String.format("%.1f", temperature )+"°C");
+        temperatureText.setForeground(Color.BLACK);
+        temperatureText.setFont(new Font("Dialog",Font.BOLD,30));
+        temperatureText.setBounds(65,355,150,35);
+
+        humidityLabel = new JLabel();
+        humidityLabel.setIcon(new ImageIcon(humidityImg));
+        humidityLabel.setBounds(10,400,45,45);
+
+        humidityText = new JLabel();
+        humidityText.setText(String.format("%.1f", humidity )+" %");
+        humidityText.setForeground(Color.BLACK);
+        humidityText.setFont(new Font("Dialog",Font.BOLD,30));
+        humidityText.setBounds(65,405,150,35);
+
+        windSpeedLabel = new JLabel();
+        windSpeedLabel.setIcon(new ImageIcon(windSpeedImg));
+        windSpeedLabel.setBounds(195,355,45,45);
+
+        windSpeedText = new JLabel();
+        windSpeedText.setText(String.format("%.1f", windSpeed )+"km/h");
+        windSpeedText.setForeground(Color.BLACK);
+        windSpeedText.setFont(new Font("Dialog",Font.BOLD,30));
+        windSpeedText.setBounds(250,360,150,35);
+
+        pressureLabel = new JLabel();
+        pressureLabel.setIcon(new ImageIcon(pressureImg));
+        pressureLabel.setBounds(195,400,45,45);
+
+        mainPanel.add(pressureLabel);
+        mainPanel.add(windSpeedText);
+        mainPanel.add(windSpeedLabel);
+        mainPanel.add(humidityText);
+        mainPanel.add(humidityLabel);
         mainPanel.add(temperatureLabel);
+        mainPanel.add(temperatureText);
         mainPanel.add(weatherTypeLabel);
         mainPanel.add(updateButton);
         mainPanel.add(cityText);
@@ -105,16 +157,16 @@ public class Gui extends JFrame {
             return cloudImg;
         } else if (weatherType.equals("Clear")) {
             return clearImg;
-        } else if (weatherType.equals("atmosphere")) {
-            return atmosphereImg;
-        } else if (weatherType.equals("snow")) {
+        } else if (weatherType.equals("Atmosphere")) {
+            return cloudImg;
+        } else if (weatherType.equals("Snow")) {
             return snowImg;
-        } else if (weatherType.equals("rain")) {
+        } else if (weatherType.equals("Rain")) {
             return rainImg;
-        } else if (weatherType.equals("drizzle")) {
+        } else if (weatherType.equals("Drizzle")) {
             return drizzleImg;
         } else {
-            return stormImg; // Default case
+            return stormImg;
         }
     }
 }

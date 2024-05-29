@@ -28,6 +28,10 @@ public class WeatherApi {
         connection.disconnect();
         return new JSONObject(response.toString());
     }
+
+    private double convertKelvinToCelsius(double kelvin){
+        return kelvin-273.15;
+    }
     public String getWeatherType(String city){
         try {
             JSONObject jsonObject = getWeatherData(city);
@@ -39,7 +43,7 @@ public class WeatherApi {
     public double getTemperature(String city){
         try {
             JSONObject jsonObject = getWeatherData(city);
-            return jsonObject.getJSONObject("main").getDouble("temp");
+            return convertKelvinToCelsius(jsonObject.getJSONObject("main").getDouble("temp"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -60,6 +64,7 @@ public class WeatherApi {
             throw new RuntimeException(e);
         }
     }
+
 
 
 }
