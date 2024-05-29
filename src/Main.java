@@ -6,7 +6,7 @@ public class Main  {
 
 
     public static void main(String[] args) throws IOException{
-        String apiKey = "ff7b4c92efcb61c1cce266736babfdb9";
+        String apiKey = "YOUR API KEY";
         WeatherApi weatherApi = new WeatherApi(apiKey);
         String defaultCity = "London";
         String weatherType = weatherApi.getWeatherType(defaultCity);
