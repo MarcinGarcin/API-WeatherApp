@@ -11,6 +11,7 @@ public class Gui extends JFrame {
     private double temperature;
     private double humidity;
     private double windSpeed;
+    private double pressure;
     private WeatherApi weatherApi;
     private JPanel mainPanel;
     private JTextField cityText;
@@ -38,13 +39,15 @@ public class Gui extends JFrame {
 
 
 
-    public Gui(String city, String weatherType, double temperature, double humidity, double windSpeed, WeatherApi weatherApi) {
+    public Gui(String city, String weatherType, double temperature, double humidity, double windSpeed, double pressure, WeatherApi weatherApi) {
         this.city = city;
         this.weatherType = weatherType;
         this.temperature = temperature;
         this.humidity = humidity;
         this.windSpeed = windSpeed;
+        this.pressure = pressure;
         this.weatherApi = weatherApi;
+
     }
 
 
@@ -89,13 +92,19 @@ public class Gui extends JFrame {
         updateButton = new JButton();
         updateButton.setIcon(new ImageIcon(searchImg));
         updateButton.setBounds(340,10,40,40);
+        updateButton.setBackground(new Color(245, 245, 220));
+        updateButton.setBorder(null);
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                city = cityText.getText().replace(' ','_');
-                weatherTypeLabel.setIcon(new ImageIcon(getPreparedImg(weatherApi.getWeatherType(city))));
-                temperatureText.setText(String.format("%.1f", weatherApi.getTemperature(city) )+"°C");
-
+                if(!cityText.getText().isEmpty()){
+                    city = cityText.getText().replace(' ','_');
+                    weatherTypeLabel.setIcon(new ImageIcon(getPreparedImg(weatherApi.getWeatherType(city))));
+                    temperatureText.setText(String.format("%.1f", weatherApi.getTemperature(city) )+"°C");
+                    humidityText.setText(String.format("%.1f", weatherApi.getHumidity(city) )+" %");
+                    windSpeedText.setText(String.format("%.1f", weatherApi.getWindSpeed(city) )+"km/h");
+                    pressureText.setText(String.format("%.0f", weatherApi.getPressure(city) )+"hPa");
+                }
             }
         });
 
@@ -105,7 +114,7 @@ public class Gui extends JFrame {
 
         temperatureLabel = new JLabel();
         temperatureLabel.setIcon(new ImageIcon(temperatureImg));
-        temperatureLabel.setBounds(20, 350, 45, 45);
+        temperatureLabel.setBounds(23, 350, 45, 45);
 
         temperatureText = new JLabel();
         temperatureText.setText(String.format("%.1f", temperature )+"°C");
@@ -115,7 +124,7 @@ public class Gui extends JFrame {
 
         humidityLabel = new JLabel();
         humidityLabel.setIcon(new ImageIcon(humidityImg));
-        humidityLabel.setBounds(10,400,45,45);
+        humidityLabel.setBounds(15,400,45,45);
 
         humidityText = new JLabel();
         humidityText.setText(String.format("%.1f", humidity )+" %");
@@ -125,18 +134,25 @@ public class Gui extends JFrame {
 
         windSpeedLabel = new JLabel();
         windSpeedLabel.setIcon(new ImageIcon(windSpeedImg));
-        windSpeedLabel.setBounds(195,355,45,45);
+        windSpeedLabel.setBounds(195,350,45,45);
 
         windSpeedText = new JLabel();
         windSpeedText.setText(String.format("%.1f", windSpeed )+"km/h");
         windSpeedText.setForeground(Color.BLACK);
         windSpeedText.setFont(new Font("Dialog",Font.BOLD,30));
-        windSpeedText.setBounds(250,360,150,35);
+        windSpeedText.setBounds(245,355,150,35);
 
         pressureLabel = new JLabel();
         pressureLabel.setIcon(new ImageIcon(pressureImg));
         pressureLabel.setBounds(195,400,45,45);
 
+        pressureText = new JLabel();
+        pressureText.setText(String.format("%.0f", pressure )+"hPa");
+        pressureText.setForeground(Color.BLACK);
+        pressureText.setFont(new Font("Dialog",Font.BOLD,30));
+        pressureText.setBounds(245,405,150,35);
+
+        mainPanel.add(pressureText);
         mainPanel.add(pressureLabel);
         mainPanel.add(windSpeedText);
         mainPanel.add(windSpeedLabel);
@@ -152,21 +168,14 @@ public class Gui extends JFrame {
     }
 
     public static Image getPreparedImg(String weatherType) {
-        System.out.println(weatherType);
-        if (weatherType.equals("Clouds")) {
-            return cloudImg;
-        } else if (weatherType.equals("Clear")) {
-            return clearImg;
-        } else if (weatherType.equals("Atmosphere")) {
-            return cloudImg;
-        } else if (weatherType.equals("Snow")) {
-            return snowImg;
-        } else if (weatherType.equals("Rain")) {
-            return rainImg;
-        } else if (weatherType.equals("Drizzle")) {
-            return drizzleImg;
-        } else {
-            return stormImg;
-        }
+        return switch (weatherType) {
+            case "Clouds" -> cloudImg;
+            case "Clear" -> clearImg;
+            case "Atmosphere" -> cloudImg;
+            case "Snow" -> snowImg;
+            case "Rain" -> rainImg;
+            case "Drizzle" -> drizzleImg;
+            default -> stormImg;
+        };
     }
 }

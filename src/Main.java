@@ -13,9 +13,11 @@ public class Main  {
         double temperature = weatherApi.getTemperature(defaultCity);
         double humidity = weatherApi.getHumidity(defaultCity);
         double windSpeed = weatherApi.getWindSpeed(defaultCity);
+        double pressure = weatherApi.getPressure(defaultCity);
+
 
         javax.swing.SwingUtilities.invokeLater(() -> {
-            Gui gui = new Gui(defaultCity, weatherType, temperature, humidity, windSpeed, weatherApi);
+            Gui gui = new Gui(defaultCity, weatherType, temperature, humidity, windSpeed,pressure, weatherApi);
             gui.showGui();
 
 

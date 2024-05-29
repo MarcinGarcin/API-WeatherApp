@@ -65,6 +65,15 @@ public class WeatherApi {
         }
     }
 
+    public double getPressure(String city){
+        try {
+            JSONObject jsonObject = getWeatherData(city);
+            return jsonObject.getJSONObject("main").getInt("pressure");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }
